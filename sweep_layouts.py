@@ -64,6 +64,13 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Also dump raw JSON lines for each configuration.",
     )
+    p.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show version and exit.",
+    )
+
     return parser.parse_args()
 
 
