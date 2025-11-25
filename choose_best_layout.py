@@ -13,8 +13,10 @@ from typing import Dict, Any, List
 
 @dataclass
 class LayoutResult:
+    """Simple wrapper for a fanout and its app.py JSON output."""
     fanout: int
     data: Dict[str, Any]
+
 
 
 METRICS = [
