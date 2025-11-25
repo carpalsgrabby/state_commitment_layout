@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-"""
-sweep_layouts.py
-
-Tiny helper for state_commitment_layout.
-
-Sweeps over a range of leaf counts and fanouts for a given style
-(aztec / zama / soundness), calls app.py in --json mode, and prints
-a compact summary table.
-
-Usage (from repo root):
-
-    python sweep_layouts.py --style aztec --leaf-min 1024 --leaf-max 65536 --step 4
-
-    # Specific fanouts only:
-    python sweep_layouts.py --style soundness --leaf-min 4096 --leaf-max 65536 \
-        --fanouts 2 4
-
-By default it assumes app.py is in the same directory as this script.
-"""
-
 from __future__ import annotations
 
 import argparse
