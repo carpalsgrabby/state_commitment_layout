@@ -36,6 +36,12 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Number of leaves in the tree.",
     )
+        p.add_argument(
+        "--print-cmd",
+        action="store_true",
+        help="Print the app.py command for each fanout.",
+    )
+
     p.add_argument(
         "--style",
         choices=["aztec", "zama", "soundness"],
@@ -64,7 +70,7 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-def run_app(app_path: Path, leaves: int, style: str, fanout: int) -> Dict[str, Any]:
+def run_app(app_path: Path, leaves: int, style: str, fanout: int, print_cmd: bool = False) -> Dict[str, Any]:
     cmd = [
         sys.executable,
         str(app_path),
@@ -75,6 +81,9 @@ def run_app(app_path: Path, leaves: int, style: str, fanout: int) -> Dict[str, A
         str(fanout),
         "--json",
     ]
+    if print_cmd:
+        print(">>", " ".join(cmd), file=sys.stderr)
+
     result = subprocess.run(
         cmd,
         text=True,
@@ -118,7 +127,7 @@ def main() -> None:
 
     for f in args.fanouts:
         try:
-            data = run_app(app_path, args.leaves, args.style, f)
+                  data = run_app(app_path, args.leaves, args.style, f, print_cmd=args.print_cmd)
             layouts.append(LayoutResult(fanout=f, data=data))
         except Exception as e:  # noqa: BLE001
             print(f"ERROR for fanout={f}: {e}", file=sys.stderr)
