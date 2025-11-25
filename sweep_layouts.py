@@ -131,7 +131,9 @@ def run_app(
 
 def main() -> None:
     args = parse_args()
-
+if args.leaves <= 0:
+        print("ERROR: --leaves must be > 0.", file=sys.stderr)
+        sys.exit(1)
     app_path = Path(args.app_path)
     if not app_path.is_file():
         print(f"ERROR: app.py not found at {app_path}", file=sys.stderr)
