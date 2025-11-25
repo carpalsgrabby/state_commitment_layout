@@ -70,12 +70,12 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
     start_pow = math.log2(leaf_min)
     end_pow = math.log2(leaf_max)
 
-    # if not exact powers of two, just linearly step instead
+     # if not exact powers of two, step linearly in leaf space
     if not start_pow.is_integer() or not end_pow.is_integer():
         n = leaf_min
         while n <= leaf_max:
             counts.append(int(n))
-            n *= 2
+            n += step
         return counts
 
     p = int(start_pow)
