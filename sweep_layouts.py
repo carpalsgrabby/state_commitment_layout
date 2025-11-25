@@ -122,6 +122,27 @@ def run_app(
 
     return data
 
+def print_table(rows: List[Dict[str, Any]]) -> None:
+    header = (
+        f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+        f"{'NODES':>12}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+    )
+    print(header)
+    print("-" * len(header))
+
+    for r in rows:
+        tree_height = r["treeHeight"]
+        total_nodes = r["totalNodes"]
+        per_proof_bytes = r["perProofBytes"]
+        total_commitment_bytes = r["totalCommitmentBytes"]
+
+        print(
+            f"{r['leaves']:10d}  {r['fanout']:6d}  "
+            f"{(tree_height if tree_height is not None else -1):6d}  "
+            f"{(total_nodes if total_nodes is not None else -1):12d}  "
+            f"{(per_proof_bytes if per_proof_bytes is not None else -1):12d}  "
+            f"{(total_commitment_bytes if total_commitment_bytes is not None else -1):16d}"
+        )
 
 def main() -> None:
     args = parse_args()
@@ -133,8 +154,7 @@ def main() -> None:
 
     leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
 
-    rows = []
-    raw_json_lines = []
+        print_table(rows)
 
     for leaves in leaf_counts:
         for fanout in args.fanouts:
