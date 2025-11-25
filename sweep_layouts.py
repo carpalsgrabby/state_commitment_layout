@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import List, Dict, Any
-
+STYLES = ["aztec", "zama", "soundness"]
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -17,6 +17,12 @@ def parse_args() -> argparse.Namespace:
         "--style",
         required=True,
         choices=["aztec", "zama", "soundness"],
+        help="Commitment style to use.",
+    )
+        parser.add_argument(
+        "--style",
+        required=True,
+        choices=STYLES,
         help="Commitment style to use.",
     )
         parser.add_argument(
