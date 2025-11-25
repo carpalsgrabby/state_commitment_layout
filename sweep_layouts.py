@@ -1,3 +1,10 @@
+"""
+Sweep helper for state_commitment_layout.
+
+Runs app.py over a grid of (leaves, fanout, style) configurations and
+prints a compact summary table, with optional JSON/CSV outputs.
+"""
+
 from __future__ import annotations
 
 import argparse
