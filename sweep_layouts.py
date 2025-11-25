@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Print progress information while sweeping.",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -143,6 +149,12 @@ def main() -> None:
             except Exception as e:  # noqa: BLE001
                 print(f"ERROR: {e}", file=sys.stderr)
                 continue
+        for fanout in args.fanouts:
+            if args.verbose:
+                print(
+                    f"[sweep] leaves={leaves} fanout={fanout} style={args.style} ...",
+                    file=sys.stderr,
+                )
 
             # keys are based on README description; tweak if you change app.py
             tree_height = data.get("treeHeight")
