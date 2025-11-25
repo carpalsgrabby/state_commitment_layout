@@ -20,6 +20,14 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--metric-filter",
+        type=str,
+        choices=["none", "perProofBytes", "totalCommitmentBytes"],
+        default="none",
+        help="Optionally filter out rows where the selected metric is zero (default: none).",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -83,6 +91,9 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
             counts.append(int(n))
             n *= 2
         return counts
+    if args.metric_filter != "none":
+        metric = args.metric_filter
+        rows = [r for r in rows if r.get(metric) not in (0, None)]
 
     p = int(start_pow)
     while p <= int(end_pow):
