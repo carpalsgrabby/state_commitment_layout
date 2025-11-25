@@ -186,13 +186,19 @@ def main() -> None:
     print("-" * len(header))
 
     for r in rows:
+               tree_height = r["treeHeight"]
+        total_nodes = r["totalNodes"]
+        per_proof_bytes = r["perProofBytes"]
+        total_commitment_bytes = r["totalCommitmentBytes"]
+
         print(
             f"{r['leaves']:10d}  {r['fanout']:6d}  "
-            f"{(r['treeHeight'] or 0):6d}  "
-            f"{(r['totalNodes'] or 0):12d}  "
-            f"{(r['perProofBytes'] or 0):12d}  "
-            f"{(r['totalCommitmentBytes'] or 0):16d}"
+            f"{(tree_height if tree_height is not None else -1):6d}  "
+            f"{(total_nodes if total_nodes is not None else -1):12d}  "
+            f"{(per_proof_bytes if per_proof_bytes is not None else -1):12d}  "
+            f"{(total_commitment_bytes if total_commitment_bytes is not None else -1):16d}"
         )
+
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
