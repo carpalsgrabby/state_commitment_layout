@@ -64,6 +64,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Also dump raw JSON lines for each configuration.",
     )
+    p = argparse.ArgumentParser(
+        description="Choose best state commitment layout for given leaves/style.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
     return parser.parse_args()
 
 
