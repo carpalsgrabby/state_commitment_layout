@@ -131,6 +131,12 @@ def run_app(
 
 def main() -> None:
     args = parse_args()
+    if args.leaf_min <= 0:
+        print("ERROR: --leaf-min must be > 0.", file=sys.stderr)
+        sys.exit(1)
+    if args.leaf_max < args.leaf_min:
+        print("ERROR: --leaf-max must be >= --leaf-min.", file=sys.stderr)
+        sys.exit(1)
 
     app_path = Path(args.app_path)
     if not app_path.is_file():
