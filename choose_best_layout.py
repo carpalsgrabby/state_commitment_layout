@@ -42,6 +42,12 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Commitment style to use.",
     )
+        p.add_argument(
+        "--json-summary",
+        action="store_true",
+        help="Print JSON summary of all layouts and best choice.",
+    )
+
     p.add_argument(
         "--fanouts",
         nargs="+",
@@ -132,6 +138,23 @@ def main() -> None:
         layouts,
         key=lambda lr: metric_value(lr.data, args.metric),
     )
+    if args.json_summary:
+        summary = {
+            "leaves": args.leaves,
+            "style": args.style,
+            "metric": args.metric,
+            "layouts": [
+                {
+                    "fanout": lr.fanout,
+                    "metricValue": metric_value(lr.data, args.metric),
+                    "data": lr.data,
+                }
+                for lr in layouts
+            ],
+            "bestFanout": best.fanout,
+        }
+        print(json.dumps(summary, indent=2, sort_keys=True))
+        return
 
     # Print table
     header = (
