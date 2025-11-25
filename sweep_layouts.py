@@ -61,7 +61,17 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
+    def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
+    """
+    Generate leaf counts between leaf_min and leaf_max.
+
+    If leaf_min and leaf_max are exact powers of two, interpret step as an
+    increment in log2 space (e.g. step=2 -> 2^n, 2^(n+2), ...).
+
+    If either bound is not an exact power of two, fall back to doubling
+    the leaf count until the max is reached.
+    """
+
     if leaf_min <= 0 or leaf_max < leaf_min:
         raise ValueError("leaf-min must be > 0 and <= leaf-max")
 
