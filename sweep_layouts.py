@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--no-table",
+        action="store_true",
+        help="Skip printing the human-readable table.",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -217,6 +223,22 @@ def main() -> None:
             },
             indent=2,
         ))
+    if not args.no_table:
+        header = (
+            f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+            f"{'NODES':>12}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+        )
+        print(header)
+        print("-" * len(header))
+
+        for r in rows:
+            print(
+                f"{r['leaves']:10d}  {r['fanout']:6d}  "
+                f"{(r['treeHeight'] or 0):6d}  "
+                f"{(r['totalNodes'] or 0):12d}  "
+                f"{(r['perProofBytes'] or 0):12d}  "
+                f"{(r['totalCommitmentBytes'] or 0):16d}"
+            )
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
