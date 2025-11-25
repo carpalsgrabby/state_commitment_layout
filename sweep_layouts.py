@@ -19,6 +19,13 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--timeout-seconds",
+        type=float,
+        default=60.0,
+        help="Timeout for each app.py invocation in seconds (default: 60).",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -86,7 +93,7 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
 
 
 def run_app(
-    app_path: Path, leaves: int, style: str, fanout: int
+    app_path: Path, leaves: int, style: str, fanout: int, timeout: float
 ) -> Dict[str, Any]:
     cmd = [
         sys.executable,
@@ -103,7 +110,9 @@ def run_app(
         text=True,
         capture_output=True,
         check=False,
+        timeout=timeout,
     )
+
 
     if result.returncode != 0:
         raise RuntimeError(
@@ -139,7 +148,7 @@ def main() -> None:
     for leaves in leaf_counts:
         for fanout in args.fanouts:
             try:
-                data = run_app(app_path, leaves, args.style, fanout)
+                               data = run_app(app_path, leaves, args.style, fanout, args.timeout_seconds)
             except Exception as e:  # noqa: BLE001
                 print(f"ERROR: {e}", file=sys.stderr)
                 continue
