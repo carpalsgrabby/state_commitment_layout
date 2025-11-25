@@ -19,6 +19,13 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--max-errors",
+        type=int,
+        default=10,
+        help="Maximum number of errors before aborting the sweep (default: 10).",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -135,14 +142,23 @@ def main() -> None:
 
     rows = []
     raw_json_lines = []
+    error_count = 0
 
     for leaves in leaf_counts:
         for fanout in args.fanouts:
             try:
                 data = run_app(app_path, leaves, args.style, fanout)
-            except Exception as e:  # noqa: BLE001
+                     except Exception as e:  # noqa: BLE001
                 print(f"ERROR: {e}", file=sys.stderr)
+                error_count += 1
+                if error_count >= args.max_errors:
+                    print(
+                        f"ERROR: reached max error count ({args.max_errors}), aborting.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
                 continue
+
 
             # keys are based on README description; tweak if you change app.py
             tree_height = data.get("treeHeight")
