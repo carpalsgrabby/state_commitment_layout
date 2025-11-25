@@ -113,6 +113,17 @@ def main() -> None:
     if not app_path.is_file():
         print(f"ERROR: app.py not found at {app_path}", file=sys.stderr)
         sys.exit(1)
+        
+    had_errors = False
+
+    for f in fanouts:
+        try:
+            data = run_app(app_path, args.leaves, args.style, f, print_cmd=args.print_cmd)
+            layouts.append(LayoutResult(fanout=f, data=data))
+        except Exception as e:  # noqa: BLE001
+            had_errors = True
+            if not args.quiet_errors:
+                print(f"ERROR for fanout={f}: {e}", file=sys.stderr)
 
     layouts: List[LayoutResult] = []
 
@@ -162,6 +173,8 @@ def main() -> None:
         f"Best fanout for leaves={args.leaves}, style={args.style}, "
         f"metric={args.metric}: {best.fanout} (marked with *)"
     )
+    if had_errors:
+        sys.exit(2)
 
 
 if __name__ == "__main__":
