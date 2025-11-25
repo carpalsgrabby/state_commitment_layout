@@ -127,6 +127,11 @@ def main() -> None:
         print("No successful layouts computed. (Did app.py error out for all?)", file=sys.stderr)
         sys.exit(1)
 
+    # Warn if metric does not appear in ANY layout
+if all(args.metric not in lr.data for lr in layouts):
+    print(f"WARNING: metric '{args.metric}' was not found in any layout results.", file=sys.stderr)
+
+
     # choose best by metric (minimize)
     best = min(
         layouts,
