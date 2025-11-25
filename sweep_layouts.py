@@ -8,6 +8,17 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Any
 
+from dataclasses import dataclass
+
+@dataclass
+class SweepRow:
+    leaves: int
+    fanout: int
+    treeHeight: int | None
+    totalNodes: int | None
+    proofBranchLength: int | None
+    perProofBytes: int | None
+    totalCommitmentBytes: int | None
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -134,7 +145,7 @@ def main() -> None:
     leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
 
     rows = []
-    raw_json_lines = []
+       rows: List[SweepRow] = []
 
     for leaves in leaf_counts:
         for fanout in args.fanouts:
@@ -151,17 +162,18 @@ def main() -> None:
             per_proof_bytes = data.get("perProofBytes")
             total_commitment_bytes = data.get("totalCommitmentBytes")
 
-            rows.append(
-                {
-                    "leaves": leaves,
-                    "fanout": fanout,
-                    "treeHeight": tree_height,
-                    "totalNodes": total_nodes,
-                    "proofBranchLength": proof_branch,
-                    "perProofBytes": per_proof_bytes,
-                    "totalCommitmentBytes": total_commitment_bytes,
-                }
+                       rows.append(
+                SweepRow(
+                    leaves=leaves,
+                    fanout=fanout,
+                    treeHeight=tree_height,
+                    totalNodes=total_nodes,
+                    proofBranchLength=proof_branch,
+                    perProofBytes=per_proof_bytes,
+                    totalCommitmentBytes=total_commitment_bytes,
+                )
             )
+
 
             if args.raw_json:
                 raw_json_lines.append(
