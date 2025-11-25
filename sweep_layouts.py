@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--app-args",
+        nargs=argparse.REMAINDER,
+        help="Extra arguments to pass through to app.py after its fixed arguments.",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -92,7 +98,11 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
 
 
 def run_app(
-    app_path: Path, leaves: int, style: str, fanout: int
+    app_path: Path,
+    leaves: int,
+    style: str,
+    fanout: int,
+    extra_args: List[str] | None = None,
 ) -> Dict[str, Any]:
     cmd = [
         sys.executable,
@@ -217,6 +227,18 @@ def main() -> None:
             },
             indent=2,
         ))
+    cmd = [
+        sys.executable,
+        str(app_path),
+        str(leaves),
+        "--style",
+        style,
+        "--fanout",
+        str(fanout),
+        "--json",
+    ]
+    if extra_args:
+        cmd.extend(extra_args)
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
