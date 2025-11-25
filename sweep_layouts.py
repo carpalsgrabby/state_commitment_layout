@@ -8,6 +8,13 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Any
 
+METRIC_KEYS = [
+    "treeHeight",
+    "totalNodes",
+    "proofBranchLength",
+    "perProofBytes",
+    "totalCommitmentBytes",
+]
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
