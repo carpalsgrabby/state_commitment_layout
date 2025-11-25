@@ -105,12 +105,14 @@ def run_app(
         check=False,
     )
 
-    if result.returncode != 0:
+       if result.returncode != 0:
         raise RuntimeError(
             f"app.py exited with {result.returncode} "
             f"for leaves={leaves}, style={style}, fanout={fanout}.\n"
-            f"stderr:\n{result.stderr}"
+            f"stderr:\n{result.stderr}\n"
+            f"stdout:\n{result.stdout}"
         )
+
 
     try:
         data = json.loads(result.stdout)
