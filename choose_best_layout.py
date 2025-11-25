@@ -43,6 +43,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
     p.add_argument(
+    "--dry-run",
+    action="store_true",
+    help="Print commands but do not execute app.py."
+)
+
+    p.add_argument(
         "--fanouts",
         nargs="+",
         type=int,
@@ -118,7 +124,12 @@ def main() -> None:
 
     for f in args.fanouts:
         try:
-            data = run_app(app_path, args.leaves, args.style, f)
+          if args.dry_run:
+    print("DRY RUN >", f"fanout={f} leaves={args.leaves} style={args.style}")
+    continue
+
+data = run_app(app_path, args.leaves, args.style, f, print_cmd=args.print_cmd)
+
             layouts.append(LayoutResult(fanout=f, data=data))
         except Exception as e:  # noqa: BLE001
             print(f"ERROR for fanout={f}: {e}", file=sys.stderr)
