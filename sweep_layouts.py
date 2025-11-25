@@ -64,6 +64,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Also dump raw JSON lines for each configuration.",
     )
+    p.add_argument(
+        "--quiet-errors",
+        action="store_true",
+        help="Suppress per-fanout error messages from app.py.",
+    )
+
     return parser.parse_args()
 
 
@@ -146,8 +152,10 @@ def main() -> None:
         for fanout in args.fanouts:
             try:
                 data = run_app(app_path, leaves, args.style, fanout)
-            except Exception as e:  # noqa: BLE001
-                print(f"ERROR: {e}", file=sys.stderr)
+                  except Exception as e:  # noqa: BLE001
+            if not args.quiet_errors:
+                print(f"ERROR for fanout={f}: {e}", file=sys.stderr)
+
                 continue
 
             # keys are based on README description; tweak if you change app.py
