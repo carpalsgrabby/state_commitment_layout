@@ -123,8 +123,9 @@ def main() -> None:
         except Exception as e:  # noqa: BLE001
             print(f"ERROR for fanout={f}: {e}", file=sys.stderr)
 
-    if not layouts:
+       if not layouts:
         print("No successful layouts computed. (Did app.py error out for all?)", file=sys.stderr)
+        print("Hint: try running app.py manually with one of the fanouts to inspect the error.", file=sys.stderr)
         sys.exit(1)
 
     # choose best by metric (minimize)
