@@ -182,6 +182,7 @@ def main() -> None:
     if not rows:
         print("No data rows collected (maybe app.py failed?).", file=sys.stderr)
         sys.exit(1)
+    rows.sort(key=lambda r: (r["leaves"], r["fanout"]))
 
     # Print a simple table
     header = (
