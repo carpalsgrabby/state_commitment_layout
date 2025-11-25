@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--json-summary",
+        action="store_true",
+        help="Emit a JSON summary of all rows to stdout after the table.",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -193,6 +199,24 @@ def main() -> None:
             f"{(r['perProofBytes'] or 0):12d}  "
             f"{(r['totalCommitmentBytes'] or 0):16d}"
         )
+    if args.json_summary:
+        summary = {
+            "style": args.style,
+            "rows": rows,
+        }
+        # If rows is a list of dataclasses, convert them:
+        def row_to_dict(r: Any) -> Dict[str, Any]:
+            if hasattr(r, "__dict__"):
+                return r.__dict__
+            return r
+
+        print(json.dumps(
+            {
+                "style": args.style,
+                "rows": [row_to_dict(r) for r in rows],
+            },
+            indent=2,
+        ))
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
