@@ -24,6 +24,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
     )
+    parser.add_argument(
+        "--show-proof-branch",
+        action="store_true",
+        help="Show proofBranchLength column in the table.",
+    )
 
     parser.add_argument(
         "--leaf-min",
@@ -83,6 +88,17 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
             counts.append(int(n))
             n *= 2
         return counts
+    base_header = (
+        f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+        f"{'NODES':>12}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+    )
+    if args.show_proof_branch:
+        header = (
+            f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+            f"{'NODES':>12}  {'PROOF BRANCH':>13}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+        )
+    else:
+        header = base_header
 
     p = int(start_pow)
     while p <= int(end_pow):
@@ -128,6 +144,24 @@ def run_app(
 
     return data
 
+    for r in rows:
+        if args.show_proof_branch:
+            print(
+                f"{r['leaves']:10d}  {r['fanout']:6d}  "
+                f"{(r['treeHeight'] or 0):6d}  "
+                f"{(r['totalNodes'] or 0):12d}  "
+                f"{(r['proofBranchLength'] or 0):13d}  "
+                f"{(r['perProofBytes'] or 0):12d}  "
+                f"{(r['totalCommitmentBytes'] or 0):16d}"
+            )
+        else:
+            print(
+                f"{r['leaves']:10d}  {r['fanout']:6d}  "
+                f"{(r['treeHeight'] or 0):6d}  "
+                f"{(r['totalNodes'] or 0):12d}  "
+                f"{(r['perProofBytes'] or 0):12d}  "
+                f"{(r['totalCommitmentBytes'] or 0):16d}"
+            )
 
 def main() -> None:
     args = parse_args()
