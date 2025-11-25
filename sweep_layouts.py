@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import argparse
 import json
 import math
@@ -125,6 +124,11 @@ def run_app(
 
 def main() -> None:
     args = parse_args()
+
+    if args.step <= 0:
+        print("ERROR: --step must be a positive integer.", file=sys.stderr)
+        sys.exit(1)
+
 
     app_path = Path(args.app_path)
     if not app_path.is_file():
