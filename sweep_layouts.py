@@ -138,7 +138,7 @@ def main() -> None:
         sys.exit(1)
 
     leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
-
+  error_count = 0
     rows = []
     raw_json_lines = []
 
@@ -146,9 +146,11 @@ def main() -> None:
         for fanout in args.fanouts:
             try:
                 data = run_app(app_path, leaves, args.style, fanout)
-            except Exception as e:  # noqa: BLE001
+                    except Exception as e:  # noqa: BLE001
                 print(f"ERROR: {e}", file=sys.stderr)
+                error_count += 1
                 continue
+
 
             # keys are based on README description; tweak if you change app.py
             tree_height = data.get("treeHeight")
