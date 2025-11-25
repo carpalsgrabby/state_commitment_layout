@@ -102,8 +102,10 @@ def metric_value(data: Dict[str, Any], metric: str) -> float:
     val = data.get(metric)
     if val is None:
         # treat missing metrics as infinite (worst)
+        # (could also log here if you want more visibility)
         return float("inf")
     return float(val)
+
 
 
 def main() -> None:
