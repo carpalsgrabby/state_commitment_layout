@@ -20,6 +20,11 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--pretty-json",
+        action="store_true",
+        help="Pretty-print raw JSON instead of compact one-line format.",
+    )
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -220,8 +225,12 @@ def main() -> None:
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
-        for entry in raw_json_lines:
-            print(json.dumps(entry, separators=(",", ":")))
+            for entry in raw_json_lines:
+            if args.pretty_json:
+                print(json.dumps(entry, indent=2, sort_keys=True))
+            else:
+                print(json.dumps(entry, separators=(",", ":")))
+
 
 
 if __name__ == "__main__":
