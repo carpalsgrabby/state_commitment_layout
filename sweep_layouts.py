@@ -180,7 +180,15 @@ def main() -> None:
                 )
 
     if not rows:
-        print("No data rows collected (maybe app.py failed?).", file=sys.stderr)
+        print(
+            "No data rows collected (maybe app.py failed or JSON schema changed?).",
+            file=sys.stderr,
+        )
+        print(
+            "Hint: verify that app.py supports --json and the expected keys "
+            "(treeHeight, totalNodes, perProofBytes, totalCommitmentBytes).",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # Print a simple table
