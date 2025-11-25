@@ -16,7 +16,7 @@ class LayoutResult:
     fanout: int
     data: Dict[str, Any]
 
-
+# Metrics are keys expected in app.py's JSON output.
 METRICS = [
     "treeHeight",
     "totalNodes",
