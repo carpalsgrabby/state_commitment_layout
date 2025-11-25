@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+"""
+choose_layout.py
 
+Given a number of leaves and a commitment style, run app.py for multiple fanouts
+and pick the layout that minimizes a chosen metric.
+"""
 from __future__ import annotations
 
 import argparse
