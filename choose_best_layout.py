@@ -134,10 +134,14 @@ def main() -> None:
     )
 
     # Print table
+        print(
+        f"# leaves={args.leaves} style={args.style} metric={args.metric}"
+    )
     header = (
         f"{'FANOUT':>6}  {'HEIGHT':>6}  {'NODES':>10}  "
         f"{'BRANCH':>8}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}  {'METRIC':>12}"
     )
+
     print(header)
     print("-" * len(header))
 
