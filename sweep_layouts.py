@@ -20,6 +20,21 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--sort-by",
+        type=str,
+        choices=[
+            "leaves",
+            "fanout",
+            "treeHeight",
+            "totalNodes",
+            "perProofBytes",
+            "totalCommitmentBytes",
+        ],
+        default="leaves",
+        help="Sort results by this column (default: leaves).",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -190,6 +205,12 @@ def main() -> None:
     )
     print(header)
     print("-" * len(header))
+    sort_key = args.sort_by
+
+    def sort_value(row: Dict[str, Any]) -> Any:
+        return row.get(sort_key) if row.get(sort_key) is not None else -1
+
+    rows.sort(key=sort_value)
 
     for r in rows:
         print(
