@@ -49,6 +49,13 @@ def parse_args() -> argparse.Namespace:
         default=[2, 4, 8, 16],
         help="Fanouts to test (default: 2 4 8 16).",
     )
+        p.add_argument(
+        "--app-path",
+        type=str,
+        default="app.py",
+        help="Path to app.py (must support --json output).",
+    )
+
     p.add_argument(
         "--metric",
         choices=METRICS,
