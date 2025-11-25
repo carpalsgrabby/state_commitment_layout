@@ -122,6 +122,15 @@ def run_app(
 
     return data
 
+def extract_metrics(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Extract tree metrics from app.py JSON result."""
+    return {
+        "treeHeight": data.get("treeHeight"),
+        "totalNodes": data.get("totalNodes"),
+        "proofBranchLength": data.get("proofBranchLength"),
+        "perProofBytes": data.get("perProofBytes"),
+        "totalCommitmentBytes": data.get("totalCommitmentBytes"),
+    }
 
 def main() -> None:
     args = parse_args()
@@ -145,12 +154,12 @@ def main() -> None:
                 continue
 
             # keys are based on README description; tweak if you change app.py
-            tree_height = data.get("treeHeight")
-            total_nodes = data.get("totalNodes")
-            proof_branch = data.get("proofBranchLength")
-            per_proof_bytes = data.get("perProofBytes")
-            total_commitment_bytes = data.get("totalCommitmentBytes")
-
+             metrics = extract_metrics(data)
+            tree_height = metrics["treeHeight"]
+            total_nodes = metrics["totalNodes"]
+            proof_branch = metrics["proofBranchLength"]
+            per_proof_bytes = metrics["perProofBytes"]
+            total_commitment_bytes = metrics["totalCommitmentBytes"]
             rows.append(
                 {
                     "leaves": leaves,
