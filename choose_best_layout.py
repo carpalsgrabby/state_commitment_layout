@@ -152,9 +152,9 @@ def main() -> None:
         mval = metric_value(d, args.metric)
 
         mark = "*" if lr.fanout == best.fanout else " "
-        print(
+              print(
             f"{fanout:6d}  {height:6d}  {nodes:10d}  "
-            f"{branch:8d}  {proof_b:12d}  {total_b:16d}  {mval:12.2f}{mark}"
+            f"{branch:8d}  {proof_b:12d}  {total_b:16d}  {mval:12.2f} {mark}"
         )
 
     print()
