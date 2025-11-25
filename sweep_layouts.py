@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--header-only",
+        action="store_true",
+        help="Print only the table header and exit.",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -156,6 +162,13 @@ def main() -> None:
             proof_branch = data.get("proofBranchLength")
             per_proof_bytes = data.get("perProofBytes")
             total_commitment_bytes = data.get("totalCommitmentBytes")
+    if args.header_only:
+        header = (
+            f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+            f"{'NODES':>12}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+        )
+        print(header)
+        return
 
             rows.append(
                 {
