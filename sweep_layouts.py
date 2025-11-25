@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print planned (leaves, fanout) pairs without calling app.py.",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -132,6 +138,11 @@ def main() -> None:
         sys.exit(1)
 
     leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
+    if args.dry_run:
+        for leaves in leaf_counts:
+            for fanout in args.fanouts:
+                print(f"DRY RUN: leaves={leaves} fanout={fanout} style={args.style}")
+        return
 
     rows = []
     raw_json_lines = []
