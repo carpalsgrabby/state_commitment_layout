@@ -94,6 +94,19 @@ def generate_leaf_counts(leaf_min: int, leaf_max: int, step: int) -> List[int]:
 def run_app(
     app_path: Path, leaves: int, style: str, fanout: int
 ) -> Dict[str, Any]:
+    """
+    Invoke app.py with the given parameters and parse its JSON output.
+
+    Expected CLI for app.py:
+        python app.py <leaves> --style <style> --fanout <fanout> --json
+
+    Returns:
+        Parsed JSON as a Python dict.
+
+    Raises:
+        RuntimeError if app.py exits non-zero or JSON is invalid.
+    """
+
     cmd = [
         sys.executable,
         str(app_path),
