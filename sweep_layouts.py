@@ -199,6 +199,5 @@ def main() -> None:
         for entry in raw_json_lines:
             print(json.dumps(entry, separators=(",", ":")))
 
-
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
