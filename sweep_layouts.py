@@ -24,6 +24,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
     )
+    parser.add_argument(
+        "--check-schema",
+        action="store_true",
+        help="Verify that JSON from app.py contains all expected keys.",
+    )
 
     parser.add_argument(
         "--leaf-min",
@@ -149,6 +154,22 @@ def main() -> None:
             except Exception as e:  # noqa: BLE001
                 print(f"ERROR: {e}", file=sys.stderr)
                 continue
+            if args.check_schema:
+                required_keys = [
+                    "treeHeight",
+                    "totalNodes",
+                    "proofBranchLength",
+                    "perProofBytes",
+                    "totalCommitmentBytes",
+                ]
+                missing = [k for k in required_keys if k not in data]
+                if missing:
+                    print(
+                        f"ERROR: JSON from app.py is missing keys: {missing} "
+                        f"(leaves={leaves}, fanout={fanout})",
+                        file=sys.stderr,
+                    )
+                    continue
 
             # keys are based on README description; tweak if you change app.py
             tree_height = data.get("treeHeight")
