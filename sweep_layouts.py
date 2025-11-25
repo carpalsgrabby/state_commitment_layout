@@ -19,6 +19,13 @@ def parse_args() -> argparse.Namespace:
         choices=["aztec", "zama", "soundness"],
         help="Commitment style to use.",
     )
+        parser.add_argument(
+        "--csv",
+        type=str,
+        default="",
+        help="Optional path to write results as CSV.",
+    )
+
     parser.add_argument(
         "--leaf-min",
         type=int,
@@ -193,6 +200,34 @@ def main() -> None:
             f"{(r['perProofBytes'] or 0):12d}  "
             f"{(r['totalCommitmentBytes'] or 0):16d}"
         )
+    if args.csv:
+        import csv
+
+        with open(args.csv, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                [
+                    "leaves",
+                    "fanout",
+                    "treeHeight",
+                    "totalNodes",
+                    "proofBranchLength",
+                    "perProofBytes",
+                    "totalCommitmentBytes",
+                ]
+            )
+            for r in rows:
+                writer.writerow(
+                    [
+                        r["leaves"],
+                        r["fanout"],
+                        r["treeHeight"],
+                        r["totalNodes"],
+                        r["proofBranchLength"],
+                        r["perProofBytes"],
+                        r["totalCommitmentBytes"],
+                    ]
+                )
 
     if args.raw_json:
         print("\n# Raw JSON lines (one per config):")
