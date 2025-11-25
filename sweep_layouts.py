@@ -141,6 +141,10 @@ def main() -> None:
 
     rows = []
     raw_json_lines = []
+    invalid_fanouts = [f for f in args.fanouts if f <= 1]
+    if invalid_fanouts:
+        print(f"ERROR: Fanouts must be > 1, got {invalid_fanouts}", file=sys.stderr)
+        sys.exit(1)
 
     for leaves in leaf_counts:
         for fanout in args.fanouts:
