@@ -20,6 +20,13 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        help="Optional limit on number of rows to print (0 = no limit).",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -138,6 +145,9 @@ def main() -> None:
         sys.exit(1)
 
     leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
+    rows_to_print = rows
+    if args.limit > 0:
+        rows_to_print = rows[: args.limit]
 
     rows = []
     raw_json_lines = []
