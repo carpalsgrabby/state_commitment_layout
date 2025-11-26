@@ -132,7 +132,8 @@ def run_app(
 def main() -> None:
     args = parse_args()
 
-    app_path = Path(args.app_path)
+      app_path = Path(args.app_path).expanduser().resolve()
+
     if not app_path.is_file():
         print(f"ERROR: app.py not found at {app_path}", file=sys.stderr)
         sys.exit(1)
