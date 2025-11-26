@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--leaf-counts",
+        type=int,
+        nargs="+",
+        help="Explicit list of leaf counts to use (overrides --leaf-min/--leaf-max).",
+    )
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -137,7 +143,11 @@ def main() -> None:
         print(f"ERROR: app.py not found at {app_path}", file=sys.stderr)
         sys.exit(1)
 
-    leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
+      if args.leaf_counts:
+        leaf_counts = args.leaf_counts
+    else:
+        leaf_counts = generate_leaf_counts(args.leaf_min, args.leaf_max, args.step)
+
 
     rows = []
     raw_json_lines = []
