@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import os
 import argparse
 import json
 import math
@@ -131,6 +131,16 @@ def run_app(
 
 def main() -> None:
     args = parse_args()
+    env_fanouts = os.getenv("SWEEP_FANOUTS")
+    if env_fanouts:
+        try:
+            args.fanouts = [int(x) for x in env_fanouts.split(",") if x.strip()]
+        except ValueError:
+            print(
+                "ERROR: SWEEP_FANOUTS must be a comma-separated list of integers.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
     app_path = Path(args.app_path)
     if not app_path.is_file():
