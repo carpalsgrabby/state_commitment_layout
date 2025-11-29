@@ -20,6 +20,12 @@ def parse_args() -> argparse.Namespace:
         help="Commitment style to use.",
     )
         parser.add_argument(
+        "--no-header",
+        action="store_true",
+        help="Suppress the header line in the table output.",
+    )
+
+        parser.add_argument(
         "--json-summary",
         action="store_true",
         help="Emit a JSON summary of all rows to stdout after the table.",
@@ -131,6 +137,13 @@ def run_app(
 
 def main() -> None:
     args = parse_args()
+    header = (
+        f"{'LEAVES':>10}  {'FANOUT':>6}  {'HEIGHT':>6}  "
+        f"{'NODES':>12}  {'PROOF BYTES':>12}  {'TOTAL COMM BYTES':>16}"
+    )
+    if not args.no_header:
+        print(header)
+        print("-" * len(header))
 
     app_path = Path(args.app_path)
     if not app_path.is_file():
